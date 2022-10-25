@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import directory from "../lib/directory";
 
@@ -42,29 +43,21 @@ export default function Home(props) {
   };
 
   return (
-    <div className="md:container md:mx-auto px-4">
-      <h1 className="text-4xl font-bold text-center pt-5 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-        Landing Page Hunt
-      </h1>
-      <h2 className="pb-5 text-center">
-        An inspiration bucket for your next landing page.
-      </h2>
-      <div className="flex flex-row flex-wrap justify-center gap-8">
-        {landingPages.map(landingPage =>
-        (<div key={landingPage.url} className="p-2">
-          <div className="text-2xl text-center py-3">
-            <a href={landingPage.url}>{landingPage.name}</a>
-          </div>
-          <div className="mt-2 shadow-lg">
-            <a href={landingPage.url}><img src={landingPage.screenshotUrl} width="400" /></a>
-          </div>
-          <div className="text-right text-sm py-5">
-            <button onClick={async () => await likePage(landingPage.slug)} className="bg-transparent  hover:text-blue-400 text-blue-900 font-semibold py-2 px-4 border hover:border-blue-400 border-blue-900 rounded">
-              {landingPage.likes} 👍
-            </button>
-          </div>
-        </div>))}
-      </div>
+    <div className="flex flex-row flex-wrap justify-center gap-8">
+      {landingPages.map(landingPage =>
+      (<div key={landingPage.url} className="py-2">
+        <div className="text-2xl text-center py-3">
+          <a href={landingPage.url}>{landingPage.name}</a>
+        </div>
+        <div className="mt-2 shadow-lg">
+          <a href={landingPage.url}><img src={landingPage.screenshotUrl} width="460" /></a>
+        </div>
+        <div className="text-right text-sm py-5">
+          <button onClick={async () => await likePage(landingPage.slug)} className="bg-transparent  hover:text-blue-400 text-blue-900 font-semibold py-2 px-4 border hover:border-blue-400 border-blue-900 rounded">
+            {landingPage.likes} 👍
+          </button>
+        </div>
+      </div>))}
     </div>
   )
 }
