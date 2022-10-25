@@ -1,9 +1,49 @@
-import styles from '../styles/Home.module.css'
+import React, { useEffect, useState } from "react";
+import directory from "../lib/directory";
 
-export default function Home({ landingPages }) {
+export default function Home(props) {
+  const [landingPages, setLandingPages] = useState(props.landingPages);
+
+  useEffect(() => {
+    const url = "/api/pages";
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setLandingPages(data.landingPages);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const likePage = async (slug) => {
+    try {
+      const response = await fetch(
+        `/api/like`,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify({ slug })
+        }
+      );
+      const data = await response.json();
+      setLandingPages(
+        landingPages.map(p => p.slug == slug ? { ...p, ...{ likes: data.likes } } : p)
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="md:container md:mx-auto px-4">
-      <h1 className="text-4xl font-bold text-center pt-5">
+      <h1 className="text-4xl font-bold text-center pt-5 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
         Landing Page Hunt
       </h1>
       <h2 className="pb-5 text-center">
@@ -19,7 +59,9 @@ export default function Home({ landingPages }) {
             <a href={landingPage.url}><img src={landingPage.screenshotUrl} width="400" /></a>
           </div>
           <div className="text-right text-sm py-5">
-            {landingPage.likes} 👍
+            <button onClick={async () => await likePage(landingPage.slug)} className="bg-transparent  hover:text-blue-400 text-blue-900 font-semibold py-2 px-4 border hover:border-blue-400 border-blue-900 rounded">
+              {landingPage.likes} 👍
+            </button>
           </div>
         </div>))}
       </div>
@@ -27,68 +69,8 @@ export default function Home({ landingPages }) {
   )
 }
 
-// This function gets called at build time on server-side.
-// It won't be called on client-side, so you can even do
-// direct database queries.
-export async function getStaticProps() {
-  const accessKey = process.env.SCREENSHOT_ONE_ACCESS_KEY;
-
-
-  const screenshotUrl = (url) => {
-    return `https://api.screenshotone.com/take?access_key=${accessKey}&url=${url}&cache=true`;
-  }
-
-  const landingPages = [
-    {
-      name: "KTool",
-      url: "https://ktool.io",
-      likes: 2,
-    },
-    {
-      name: "Tailwind CSS",
-      url: "https://tailwindcss.com/",
-      likes: 5,
-    },
-    {
-      name: "Tools for Creators",
-      url: "https://toolsforcreators.co/",
-      likes: 3,
-    },
-    {
-      name: "llama life.",
-      url: "https://llamalife.co/",
-      likes: 4,
-    },
-    {
-      name: "logology",
-      url: "https://www.logology.co/",
-      likes: 3
-    },
-    {
-      name: "Product Hunt",
-      url: "https://www.producthunt.com/",
-      likes: 2,
-    },
-    {
-      name: "ScreenshotOne",
-      url: "https://screenshotone.com/",
-      likes: 1
-    },
-    {
-      name: "Pika",
-      url: "https://pika.style/",
-      likes: 5,
-    },
-    {
-      name: "Ship SaaS",
-      url: "https://shipsaas.com/",
-      likes: 3,
-    }
-  ];
-
-  for (let landingPage of landingPages) {
-    landingPage.screenshotUrl = screenshotUrl(landingPage.url);
-  }
+export async function getServerSideProps(context) {
+  const landingPages = await directory.loadLandingPages();
 
   return {
     props: {
