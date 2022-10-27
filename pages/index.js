@@ -4,22 +4,6 @@ import directory from "../lib/directory";
 export default function Home(props) {
   const [landingPages, setLandingPages] = useState(props.landingPages);
 
-  useEffect(() => {
-    const url = "/api/pages";
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        setLandingPages(data.landingPages);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const likePage = async (slug) => {
     try {
       const response = await fetch(
