@@ -1,8 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Landing Page Hunt 
+-----------------
+
+Landing Page Hunt is a site directory based on [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), [Prisma](https://www.prisma.io/), and [ScreenshotOne](https://screenshotone.com). It is an example project to try and showcase mentioned stack. 
+
+![Landing Page Hunt](screenshot.png)
+
+My goal with the project was to evaluate Next.js, Tailwind CSS, and Prisma as a stack that I may use for my following projects. 
+
+I enjoyed building this simple project a lot. 
 
 ## Getting Started
 
-First, run the development server:
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+First, install the dependencies: 
+```
+npm install 
+```
+
+Execute migrations and seeds for Prisma: 
+```
+npx prisma migrate dev
+```
+
+Then run the development server:
 
 ```bash
 npm run dev
